@@ -17,5 +17,17 @@ class UniModule:
             ndiscovery = "N"
         message = f"{self.code}:{self.name}:Y{self.year}:{self.credit}CR:{self.grade}GRD:{nPFP}PFP:{ndiscovery}DISC"
         print (message)
-COMP1011 = UniModule("COMP1011", "Intro to Prog.", 1, 10, discovery=True)
-COMP1011.display_details()
+
+class Transcript:
+    def __init__(self):
+        self.modules = []
+    def add_module(self, item):
+        for module in self.modules:
+            if module == item:
+                raise ValueError("module already exists!")
+        if not isinstance(item, UniModule):
+            raise ValueError("expected item be an instance of UniModule.")
+        self.modules.append(item)
+    def print_transcript(self):
+        for module in self.modules:
+            module.display_details()
