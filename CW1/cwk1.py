@@ -6,69 +6,75 @@ Introduction to Programming Coursework 1
 
 
 def valid_puzzle(puzzle: list) -> bool:
-    if not isinstance(puzzle, list): # Check if puzzle is a list
+    if not isinstance(puzzle, list):  # Check if puzzle is a list.
         return False
-    length = -1 # Length of each string in puzzle, init at -1
+    length = -1  # Length of each string in puzzle, init at -1
     for string in puzzle:
         if not isinstance(string, str):
             return False
-        if length == -1: # If first string, set length to length of string
+        if length == -1:  # If first string, set length to length of string
             length = len(string)
-        elif len(string) != length: # If length of string not equal to length, return False
+        # If length of string not equal to length, return False
+        elif len(string) != length:
             return False
     return True
 
 
 def similarity_grouping(data: list) -> list:
-    if not isinstance(data, list): # Check if data is a list
+    if not isinstance(data, list):  # Check if data is a list
         return []
     found = []
     out = []
     for i, item in enumerate(data):
-        if isinstance(item, str) and item.isdigit(): # Convert strings to int if possible
+        # Convert strings to int if possible
+        if isinstance(item, str) and item.isdigit():
             data[i] = int(item)
-        if item not in found: # If item not found, add to found and create new list
+        # If item not found, add to found and create new list
+        if item not in found:
             found.append(item)
             out.append([item])
-        else: # If item found, add to list with same index as found to keep the order
+        # If item found, add to list with same index as found
+        else:
             out[found.index(item)].append(item)
     return out
 
 
 def highest_count_items(data: str) -> list:
-    elements = {} # Dictionary to store items and their count
-    for item in data.split(','): # Split data into list
-        item = item.strip() # Remove whitespace
-        if item not in elements: # If item not found, add to items
+    elements = {}  # Dictionary to store items and their count
+    for item in data.split(','):  # Split data into list
+        item = item.strip()  # Remove whitespace
+        if item not in elements:  # If item not found, add to items
             elements[item] = 1
         else:
             elements[item] += 1
-    max_count = max(elements.values()) # Get max count
+    max_count = max(elements.values())  # Get max count
     out = []
     for key, value in elements.items():
         if value == max_count:
-            out.append([key, max_count]) # Add items with max count to out
+            out.append([key, max_count])  # Add items with max count to out
     return out
 
 
 def valid_char_in_string(popList: list, charSet: list) -> bool:
+    # Check if popList and charSet are lists
     if not (isinstance(popList, list)
-        and isinstance(charSet, list)): # Check if popList and charSet are lists
+            and isinstance(charSet, list)):
         return False
     for string in popList:
         for char in string:
-            if char not in charSet: # If char not in charSet, return False
+            if char not in charSet:  # If char not in charSet, return False
                 return False
     return True
 
 
 def total_price(unit: int) -> float:
-    sixes = unit // 6 # Get number of 6 packs
-    singles = unit % 6 # Get number of units not in 6 packs
-    price = sixes * 5 + singles * 1.25 # Calculate price
+    sixes = unit // 6  # Get number of 6 packs
+    singles = unit % 6  # Get number of units not in 6 packs
+    price = sixes * 5 + singles * 1.25  # Calculate price
     if price >= 20:
-        price *= 0.9 # Apply 10% discount if price over £20
+        price *= 0.9  # Apply 10% discount if price over £20
     return price
+
 
 if __name__ == "__main__":
     # sample test for task 1.1
