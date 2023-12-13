@@ -57,30 +57,30 @@ htmlTableTemplate = """
 
 class Diabetes:
     def __init__(self, filepath) -> None:
-        self.headers = []
+        self.header = []
         self.data = []
-        try:
+        try:  # try to open the file
             with open(filepath) as csvfile:
                 reader = csv.reader(csvfile)
-                self.headers = next(reader)
-                self.data = list(reader)
+                self.header = next(reader)  # read the headers
+                self.data = list(reader)  # read the data
         except FileNotFoundError:
-            print("File not found")
+            raise Exception("File not found")
 
     def get_dimension(self) -> list:
-        print([len(self.data), len(self.data[0])])
+        return [len(self.data), len(self.data[0])]  # return the dimension
 
     def web_summary(self, filepath: str) -> None:
         # 0 == no, 1 == yes
         newData = [[], []]
         htmlRows = ""
-        for header in self.headers:
+        for header in self.header:  # Initialise the newData list
             newData[0].append([0, 0])
             newData[1].append([0, 0])
-        for row in self.data:
+        for row in self.data:  # Count the number of yes/no for each attribute
             colNumber = 0
             pos = 0
-            if row[-1] == "Positive":
+            if row[-1] == "Positive":  # If the row class is positive
                 pos = 1
             for item in row:
                 if item == "No":
@@ -88,9 +88,9 @@ class Diabetes:
                 else:
                     newData[pos][colNumber][1] += 1
                 colNumber += 1
-        for i in range(2, len(newData[0]) - 1):
+        for i in range(2, len(newData[0]) - 1):  # Add rows to the html table
             htmlRows += "<tr>"
-            htmlRows += "<td>" + str(self.headers[i]) + "</td>"
+            htmlRows += "<td>" + str(self.header[i]) + "</td>"
             htmlRows += ("<td style=\"text-align: center;\">"
                          + str(newData[1][i][1]) + "</td>")
             htmlRows += ("<td style=\"text-align: center;\">"
@@ -100,9 +100,9 @@ class Diabetes:
             htmlRows += ("<td style=\"text-align: center;\">"
                          + str(newData[0][i][0]) + "</td>")
             htmlRows += "</tr>"
-        htmlOut = htmlTableTemplate.format(htmlRows)
+        htmlOut = htmlTableTemplate.format(htmlRows)  # Add the html rows
         with open(filepath, "w") as htmlFile:
-            htmlFile.write(htmlOut)
+            htmlFile.write(htmlOut)  # Write the html to the file
 
     def count_instances(self, criteria) -> int:
         """
@@ -112,13 +112,13 @@ class Diabetes:
         Example: count_instances({"Gender": "Female", "weakness": "Yes"})
         This will return the number of instances that satisfy the criteria
         """
-        logicalList = [0 for row in self.headers]
+        logicalList = [0 for row in self.header]  # Initialise the logical list
         instances = 0
         for key in criteria:
-            if key in self.headers:
-                logicalList[self.headers.index(key)] = criteria[key]
+            if key in self.header:  # If the key is in the header
+                logicalList[self.header.index(key)] = criteria[key]
         for row in self.data:
-            if all(item1 == item2 for item1, item2
+            if all(item1 == item2 for item1, item2  # Kind of a logical AND
                     in zip(logicalList, row) if item1 != 0):
                 instances += 1
         return instances
